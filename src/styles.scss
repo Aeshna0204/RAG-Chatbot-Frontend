@@ -1,3 +1,5 @@
+@use "sass:color";
+
 // 🎨 Grey + White Readable Theme - FIXED VERSION
 $app-bg: #f3f4f6; // light grey overall background
 $sidebar-bg: #e5e7eb; // sidebar lighter grey
@@ -45,8 +47,8 @@ html {
     background: $app-bg;
 
     .sidebar {
-        width: 250px;
-        min-width: 250px; // ✅ Prevent sidebar from shrinking
+        width: 280px;
+        min-width: 280px; // ✅ Prevent sidebar from shrinking
         background: $sidebar-bg;
         color: $sidebar-text;
         padding: 1rem;
@@ -57,33 +59,78 @@ html {
             background: $user-msg;
             color: white;
             border: none;
-            padding: 0.5rem;
-            margin-bottom: 1rem;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.5rem;
             cursor: pointer;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: background-color 0.2s;
+
+            &:hover {
+                background: color.adjust($user-msg, $lightness: -10%);
+            }
         }
 
         .session-list {
             flex: 1;
             overflow-y: auto;
 
+            h3 {
+                margin-bottom: 1rem;
+                font-size: 1.1rem;
+                font-weight: 600;
+                color: $sidebar-text;
+            }
+
             .session-item {
                 display: flex;
-                justify-content: space-between;
-                padding: 0.3rem 0;
-                cursor: pointer;
+                align-items: center;
+                gap: 0.75rem;
+                padding: 0.75rem 0;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                min-height: 48px; // Fixed height for consistent spacing
+
+                &:last-child {
+                    border-bottom: none;
+                }
 
                 span {
                     flex: 1;
+                    cursor: pointer;
+                    font-size: 0.9rem;
+                    line-height: 1.4;
+                    color: $sidebar-text;
+                    // Text trimming for long session names
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    max-width: calc(100% - 80px); // Account for button width
+                    
+                    &:hover {
+                        color: color.adjust($sidebar-text, $lightness: -15%);
+                    }
                 }
 
                 button {
-                    background: $user-msg;
+                    background: #dc3545;
                     border: none;
                     color: white;
                     cursor: pointer;
+                    padding: 0.5rem 0.75rem;
+                    border-radius: 6px;
+                    font-size: 0.8rem;
+                    font-weight: 500;
+                    transition: background-color 0.2s;
+                    flex-shrink: 0; // Prevent button from shrinking
+                    width: 70px; // Fixed width for consistent button size
+                    height: 32px; // Fixed height
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
 
                     &:hover {
-                        background: #c0392b;
+                        background: #c82333;
                     }
                 }
             }
@@ -107,6 +154,8 @@ html {
             width: 100%;
             height: calc(100vh - 60px); // Subtract navbar height
             overflow: hidden;
+            padding: 0 2rem; // Add horizontal padding to create space from edges
+            box-sizing: border-box;
         }
 
         // ✅ UPDATED: Ensure chat-box ALWAYS takes full width
@@ -272,59 +321,74 @@ html {
     justify-content: flex-end;
     box-sizing: border-box;
     max-width: none !important;
+    // Remove the margins from here since we're adding them to main-content
 
     .messages {
         flex: 1;
-        padding: 1rem;
+        padding: 2rem 1rem; // Reduce horizontal padding since we have margins on container
         overflow-y: auto;
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
+        gap: 1.5rem; // More spacing between messages
         min-height: 0;
         width: 100%;
 
         .message {
-            max-width: 70%;
-            padding: 0.5rem 1rem;
+            max-width: 65%; // Reduce max width to create more space from edges
+            padding: 1rem 1.25rem; // Back to original padding
             border-radius: 20px;
+            line-height: 1.5; // Back to original line height
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); // Original shadow
+            word-wrap: break-word; // Handle long text properly
 
             &.user {
                 align-self: flex-end;
-                background: $user-msg;
+                background: $user-msg; // Back to original color
                 color: white;
+                margin-right: 1.5rem; // Add right margin to create space from browser edge
             }
 
             &.bot {
                 align-self: flex-start;
-                background: $bot-msg;
+                background: $bot-msg; // Back to original color
                 color: #111827;
+                margin-left: 1.5rem; // Add left margin to create space from sidebar
             }
+        }
+
+        // Add some breathing room at the bottom
+        &::after {
+            content: '';
+            height: 1rem;
+            flex-shrink: 0;
         }
     }
 
     .input-box {
         display: flex !important;
         border-top: 1px solid #e5e7eb;
-        padding: 1rem;
+        padding: 1.25rem 1.5rem; // Add padding to sides
+        margin: 0; // Remove margins and extend background to fill width
         background: #f9fafb;
-        width: 100% !important;
+        width: 100% !important; // Full width to fill the space
         max-width: none !important;
         box-sizing: border-box;
         flex-shrink: 0;
         min-width: 0;
+        gap: 1rem; // Add gap between input and button
 
         input {
             flex: 1 !important;
             border: 1px solid #d1d5db;
             border-radius: 24px;
-            padding: 0.75rem 1rem;
+            padding: 0.875rem 1.25rem; // Increased padding
             font-size: 1rem;
-            margin-right: 0.75rem;
             min-width: 0;
             max-width: none !important;
             box-sizing: border-box;
             width: auto !important;
             background: white;
+            transition: border-color 0.2s, box-shadow 0.2s;
 
             &:focus {
                 outline: none;
@@ -342,21 +406,27 @@ html {
             color: white;
             border: none;
             border-radius: 24px;
-            padding: 0.75rem 1.5rem;
+            padding: 0.875rem 2rem; // Increased padding
             cursor: pointer;
             font-weight: 500;
             flex-shrink: 0;
             white-space: nowrap;
+            transition: background-color 0.2s, transform 0.1s;
 
             &:hover {
                 background: #2563eb;
+                transform: translateY(-1px);
+            }
+
+            &:active {
+                transform: translateY(0);
             }
 
             &:disabled {
                 background: #9ca3af;
                 cursor: not-allowed;
+                transform: none;
             }
         }
     }
 }
-
