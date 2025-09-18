@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Message from "./Message";
 import { fetchHistory, sendMessage } from "../api";
 
-const ChatBox = ({ sessionId }) => {
+const ChatBox = ({ sessionId, onFirstMessage }) => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
     const messagesEndRef = useRef(null);
@@ -19,7 +19,6 @@ const ChatBox = ({ sessionId }) => {
         }
     }, [sessionId]);
 
-
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
@@ -28,11 +27,19 @@ const ChatBox = ({ sessionId }) => {
 
     const handleSend = async () => {
         if (!input.trim()) return;
+        
         const userMsg = { sender: "user", text: input };
+        const currentInput = input; // Store the input before clearing it
+        
         setMessages((prev) => [...prev, userMsg]);
         setInput("");
 
-        const botReply = await sendMessage(sessionId, input);
+        // If this is the first message (no previous messages), update the session title
+        if (messages.length === 0 && onFirstMessage) {
+            onFirstMessage(sessionId, currentInput);
+        }
+
+        const botReply = await sendMessage(sessionId, currentInput);
         const botMsg = { sender: "bot", text: botReply.answer || "" };
         setMessages((prev) => [...prev, botMsg]);
     };
@@ -62,8 +69,5 @@ const ChatBox = ({ sessionId }) => {
         </div>
     );
 };
-
-
-
 
 export default ChatBox;

@@ -9,20 +9,19 @@ const SessionList = ({ sessions = [], onSelect, onDelete }) => {
     <div className="session-list">
       <h3>Sessions</h3>
       {sessions.map((s) => (
-        <div key={s} className="session-item">
+        <div key={s.sessionId} className="session-item">
           <span
             style={{ cursor: "pointer", marginRight: "10px" }}
             onClick={() => onSelect(s)}
           >
-            {s}
+            {s.firstQuestion || "New Chat"}
           </span>
-          <button onClick={() => onDelete(s)}>Delete</button>
+         <button onClick={() => onDelete(s.sessionId)}>Delete</button>
         </div>
       ))}
     </div>
   );
 };
-
 
 
 
