@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE = "http://localhost:5000"; // replace with your backend
+const API_BASE = "https://rag-chatbot-backend-o0ee.onrender.com"; // replace with your backend
 
 export const createSession = async () => {
   const res = await axios.post(`${API_BASE}/session/create-session` ,{}, // empty body
