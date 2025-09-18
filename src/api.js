@@ -45,3 +45,10 @@ export const sendMessage = async (sessionId, message) => {
   );
   return res.data; // bot reply
 };
+
+export const resetChat = async (sessionId) => {
+  const res = await axios.post(`${API_BASE}/session/${sessionId}/reset`, {},
+    // { headers: { "Cache-Control": "no-cache" } }
+  );
+  return res.data;
+};

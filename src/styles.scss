@@ -323,6 +323,45 @@ html {
     max-width: none !important;
     // Remove the margins from here since we're adding them to main-content
 
+    .chat-header {
+        display: flex;
+        justify-content: flex-end;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #e5e7eb;
+        background: #fafbfc;
+        flex-shrink: 0;
+
+        .reset-chat-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: background-color 0.2s, opacity 0.2s;
+
+            &:hover:not(:disabled) {
+                background: #dc2626;
+            }
+
+            &:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+            }
+        }
+    }
+
+    .no-messages {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #6b7280;
+        font-style: italic;
+    }
+
     .messages {
         flex: 1;
         padding: 2rem 1rem; // Reduce horizontal padding since we have margins on container
@@ -427,6 +466,69 @@ html {
                 cursor: not-allowed;
                 transform: none;
             }
+        }
+    }
+}
+
+// Add these styles to your existing styles.scss file
+
+// Loading animation for bot response
+.message.loading {
+    .loading-dots {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 0.25rem 0;
+
+        span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #6b7280;
+            animation: loading-bounce 1.4s infinite ease-in-out both;
+
+            &:nth-child(1) {
+                animation-delay: -0.32s;
+            }
+
+            &:nth-child(2) {
+                animation-delay: -0.16s;
+            }
+
+            &:nth-child(3) {
+                animation-delay: 0s;
+            }
+        }
+    }
+}
+
+@keyframes loading-bounce {
+    0%, 80%, 100% {
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+// Update input and button styles for loading state
+.input-box {
+    input:disabled {
+        background: #f3f4f6;
+        color: #6b7280;
+        cursor: not-allowed;
+    }
+
+    button:disabled {
+        background: #9ca3af;
+        cursor: not-allowed;
+        transform: none;
+
+        &:hover {
+            background: #9ca3af;
+            transform: none;
         }
     }
 }
