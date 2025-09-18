@@ -11,17 +11,18 @@ A modern, responsive React frontend for the RAG-powered chatbot designed for new
 - Typing Indicators: Visual feedback during response generation
 
 ### Architecture
+
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   React App     │───▶│   API Client    │───▶│  Backend API    │
+│   React App     │───▶│   API Client    │───▶│  Backend API   |
 │  (Components)   │    │  (Axios/Fetch)  │    │ (Node.js + RAG) │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
    
 ### Quick Start
 Prerequisites
 
-React Vite SCSS
-npm or yarn
-RAG Chatbot Backend running (see backend repo)
+- React Vite SCSS
+- npm or yarn
+- RAG Chatbot Backend running (see backend repo)
 
 Installation
 ```git clone https://github.com/Aeshna0204/RAG-Chatbot-Frontend.git
