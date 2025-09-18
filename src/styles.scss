@@ -1,10 +1,4 @@
-// $app-bg: #f5f7fa;
-// $sidebar-bg: #2c3e50;
-// $main-bg: #ecf0f1;
-// $user-msg: #3498db;
-// $bot-msg: #2ecc71;
-
-// 🎨 Grey + White Readable Theme
+// 🎨 Grey + White Readable Theme - FIXED VERSION
 $app-bg: #f3f4f6; // light grey overall background
 $sidebar-bg: #e5e7eb; // sidebar lighter grey
 $sidebar-text: #111827; // dark text for readability
@@ -12,6 +6,36 @@ $main-bg: #ffffff; // white chat background
 $user-msg: #374151; // dark grey bubble for user
 $bot-msg: #e5e7eb; // light grey bubble for bot
 
+/* Override App.css constraints for full-width chat app */
+#root {
+  max-width: none !important;  /* Remove 1280px limit */
+  width: 100vw !important;     /* Take full viewport width */
+  margin: 0 !important;        /* Remove centering margins */
+  padding: 0 !important;       /* Remove padding that reduces space */
+  text-align: left !important; /* Remove center alignment */
+  height: 100vh !important;    /* Take full viewport height */
+  overflow: hidden !important; /* Prevent scrolling */
+}
+
+/* Also override body constraints from index.css */
+body {
+  display: block !important;     /* Remove flex centering */
+  place-items: unset !important; /* Remove place-items centering */
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  overflow: hidden !important;
+}
+
+/* Ensure html takes full size too */
+html {
+  width: 100vw !important;
+  height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
 
 .app {
     display: flex;
@@ -22,25 +46,20 @@ $bot-msg: #e5e7eb; // light grey bubble for bot
 
     .sidebar {
         width: 250px;
+        min-width: 250px; // ✅ Prevent sidebar from shrinking
         background: $sidebar-bg;
         color: $sidebar-text;
-        // color: white;
         padding: 1rem;
         display: flex;
         flex-direction: column;
 
         .create-session {
-            // background: #e74c3c;
             background: $user-msg;
             color: white;
             border: none;
             padding: 0.5rem;
             margin-bottom: 1rem;
             cursor: pointer;
-
-            // &:hover {
-            //     background: #c0392b;
-            // }
         }
 
         .session-list {
@@ -58,7 +77,6 @@ $bot-msg: #e5e7eb; // light grey bubble for bot
                 }
 
                 button {
-                    // background: #e74c3c;
                     background: $user-msg;
                     border: none;
                     color: white;
@@ -77,25 +95,46 @@ $bot-msg: #e5e7eb; // light grey bubble for bot
         background: $main-bg;
         display: flex;
         flex-direction: column;
+        min-width: 0; // ✅ Important: allows flex item to shrink below content size
+        width: 100%; // ✅ ADDED: Ensure main takes full available width
+        max-width: none; // ✅ ADDED: Remove any max-width constraints
 
-        // padding: 0;
-        // height: 100%;
-        // ✅ add this
-        .chat-box {
+         // New main-content wrapper to accommodate navbar
+        .main-content {
             flex: 1;
+            display: flex;
+            flex-direction: column;
             width: 100%;
-            
+            height: calc(100vh - 60px); // Subtract navbar height
+            overflow: hidden;
         }
 
-        // This wrapper ensures content always fills full space
+        // ✅ UPDATED: Ensure chat-box ALWAYS takes full width
+        .chat-box {
+            flex: 1 !important;
+            width: 100% !important;
+            height: 100%;
+            display: flex !important;
+            flex-direction: column;
+            border-radius: 0;
+            background: white;
+            justify-content: flex-end; // keep input at bottom
+            min-height: 100%; // ✅ ADDED: Ensure minimum height
+            max-width: none !important; // ✅ ADDED: Remove any max-width constraints
+        }
+
+        // ✅ UPDATED: This wrapper ensures content always fills full space
         .content-wrapper {
             flex: 1;
             display: flex;
             flex-direction: column;
+            width: 100% !important; // ✅ ADDED: Force full width
+            height: 100%; // ✅ ADDED: Take full height
         }
 
         .no-session {
             flex: 1; // take full space
+            width: 100% !important; // ✅ ADDED: Force full width
             display: flex;
             justify-content: center; // horizontal center
             align-items: center; // vertical center
@@ -107,18 +146,132 @@ $bot-msg: #e5e7eb; // light grey bubble for bot
     }
 }
 
-.chat-box {
-    flex: 1; // make it take all available space
-    width: 100%;
-    // max-width: 1000px; // optional: make wider
-    height: 100%;
+// Navbar Styles
+.navbar {
+    height: 60px;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
     display: flex;
-    flex-direction: column;
-    // border: 1px solid #bdc3c7;
-    // border-radius: 8px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    flex-shrink: 0; // Prevent navbar from shrinking
+    width: 100%;
+    box-sizing: border-box;
+
+    .navbar-left {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        .navbar-title {
+            .app-title {
+                font-size: 1.1rem;
+                font-weight: 600;
+                color: #111827;
+            }
+
+            .session-title {
+                font-size: 1rem;
+                font-weight: 500;
+                color: #374151;
+            }
+        }
+
+        .session-info {
+            .session-id {
+                font-size: 0.85rem;
+                color: #6b7280;
+                background: #f3f4f6;
+                padding: 0.25rem 0.5rem;
+                border-radius: 4px;
+            }
+        }
+    }
+
+    .navbar-center {
+        .model-selector {
+            .model-dropdown {
+                background: #f9fafb;
+                border: 1px solid #d1d5db;
+                border-radius: 8px;
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+                color: #374151;
+                cursor: pointer;
+                min-width: 120px;
+
+                &:focus {
+                    outline: none;
+                    border-color: #3b82f6;
+                    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+                }
+
+                &:hover {
+                    background: #f3f4f6;
+                }
+            }
+        }
+    }
+
+    .navbar-right {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        .navbar-btn {
+            background: none;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 6px;
+            color: #6b7280;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &:hover {
+                background: #f3f4f6;
+                color: #374151;
+            }
+        }
+
+        .user-menu {
+            .user-avatar {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                background: #3b82f6;
+                color: white;
+                border: none;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 500;
+                font-size: 0.9rem;
+
+                &:hover {
+                    background: #2563eb;
+                }
+            }
+        }
+    }
+}
+
+
+// Updated chat-box styles to work with navbar
+.chat-box {
+    flex: 1 !important;
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
     border-radius: 0;
     background: white;
-    justify-content: flex-end; // keep input at bottom
+    justify-content: flex-end;
+    box-sizing: border-box;
+    max-width: none !important;
 
     .messages {
         flex: 1;
@@ -128,6 +281,7 @@ $bot-msg: #e5e7eb; // light grey bubble for bot
         flex-direction: column;
         gap: 0.5rem;
         min-height: 0;
+        width: 100%;
 
         .message {
             max-width: 70%;
@@ -143,52 +297,66 @@ $bot-msg: #e5e7eb; // light grey bubble for bot
             &.bot {
                 align-self: flex-start;
                 background: $bot-msg;
-                // color: white;
-                color: #111827; // ✅ dark text on light grey
+                color: #111827;
             }
         }
     }
 
     .input-box {
-        display: flex;
-        border-top: 1px solid #bdc3c7;
-        // justify-content: center; // center horizontally
+        display: flex !important;
+        border-top: 1px solid #e5e7eb;
         padding: 1rem;
-        background: #f5f5f5;
+        background: #f9fafb;
+        width: 100% !important;
+        max-width: none !important;
+        box-sizing: border-box;
+        flex-shrink: 0;
+        min-width: 0;
 
         input {
-            flex: 1;
-            //  max-width: 800px; // optional, like ChatGPT
-            // border: none;
-            border: 1px solid #ccc;
-            border-radius: 9999px; // fully rounded
-            // padding: 0.8rem;
-            padding: 0.8rem 1rem;
+            flex: 1 !important;
+            border: 1px solid #d1d5db;
+            border-radius: 24px;
+            padding: 0.75rem 1rem;
             font-size: 1rem;
-            // border-radius: 0 0 0 8px;
-            // border-radius: 0;
+            margin-right: 0.75rem;
+            min-width: 0;
+            max-width: none !important;
+            box-sizing: border-box;
+            width: auto !important;
+            background: white;
 
             &:focus {
                 outline: none;
+                border-color: #3b82f6;
+                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            }
+
+            &::placeholder {
+                color: #9ca3af;
             }
         }
 
         button {
-            margin-left: 0.5rem;
-            background: #3498db;
+            background: #3b82f6;
             color: white;
             border: none;
-            border-radius: 9999px; // fully rounded
-            // padding: 0 1rem;
-            padding: 0.8rem 1.2rem;
+            border-radius: 24px;
+            padding: 0.75rem 1.5rem;
             cursor: pointer;
-            // border-radius: 0 0 8px 0;
-            // border-radius: 0;
-            font-weight: bold;
+            font-weight: 500;
+            flex-shrink: 0;
+            white-space: nowrap;
 
             &:hover {
-                background: #2980b9;
+                background: #2563eb;
+            }
+
+            &:disabled {
+                background: #9ca3af;
+                cursor: not-allowed;
             }
         }
     }
 }
+
